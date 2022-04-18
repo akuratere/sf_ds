@@ -1,44 +1,64 @@
-''' Game 'guess the number' '''
-'''Computer guesses the number'''
+"""Игра угадай число
+Компьютер сам загадывает и сам угадывает число
+"""
 
 import numpy as np
-def random_predict(number:int = 1) -> int:
-    """randomly guessing the numbers
+
+
+def random_predict(number: int = 1) -> int:
+    """Рандомно угадываем число
 
     Args:
-        number (int, optional): number that is set. Defaults to 1.
+        number (int, optional): Загаданное число. Defaults to 1.
 
     Returns:
-        int: number of tries
+        int: Число попыток
     """
+    import numpy as np
+
+    min = 1
+    max = 101
+
+    number = np.random.randint(min, max)
+
     count = 0
+
     while True:
-        count += 1
-        predict_number = np.random.randint(1, 101)
-        if number == predict_number:
-            break
-        
+        count+=1
+        mid = round((min+max) / 2)
+    
+        if mid > number:
+            max = mid
+    
+        elif mid < number:
+            min = mid
+
+        else:
+            break #конец игры выход из цикла
     return count
 
+
 def score_game(random_predict) -> int:
-    """Calculating the average amount of tries
+    """За какое количство попыток в среднем за 1000 подходов угадывает наш алгоритм
 
     Args:
-        random_predict (_type_): function of guessing the number
+        random_predict ([type]): функция угадывания
 
     Returns:
-        int: average number of guesses
+        int: среднее количество попыток
     """
     count_ls = []
-    np.random.seed(1)
-    random_array = np.random.randint(1,101, size = 1000) #list of 1000 numbers
-    
+    np.random.seed(1)  # фиксируем сид для воспроизводимости
+    random_array = np.random.randint(1, 101, size=(1000))  # загадали список чисел
+
     for number in random_array:
         count_ls.append(random_predict(number))
-        
+
     score = int(np.mean(count_ls))
-    print(f'Your algorithm guesses the number in average of {score} tries')
+    print(f"Ваш алгоритм угадывает число в среднем за:{score} попыток")
     return score
-    
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
+    # RUN
     score_game(random_predict)
